@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mega Gift Store – Unique Gifts Under-budget</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#fff9f4;
+    --surface:#ffffff;
+    --primary:#e8580c;
+    --primary-dark:#c04508;
+    --primary-light:#fff0e8;
+    --accent:#ffb347;
+    --text:#1a1006;
+    --muted:#7a6555;
+    --border:#f0e4d8;
+    --radius:16px;
+    --shadow:0 4px 24px rgba(232,88,12,.10);
+    --shadow-lg:0 12px 40px rgba(232,88,12,.18);
+    --font-display:'Playfair Display',serif;
+    --font-body:'DM Sans',sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);font-family:var(--font-body);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+  /* ── HEADER ── */
+  header{
+    background:var(--surface);
+    border-bottom:2px solid var(--border);
+    position:sticky;top:0;z-index:100;
+    padding:0 16px;
+  }
+  .header-inner{
+    max-width:900px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 0;gap:12px;
+  }
+  .logo-block{}
+  .logo-name{
+    font-family:var(--font-display);font-size:1.6rem;font-weight:900;
+    color:var(--primary);letter-spacing:-0.5px;line-height:1;
+  }
+  .logo-tag{
+    font-size:.72rem;font-weight:500;color:var(--muted);
+    letter-spacing:.5px;text-transform:uppercase;margin-top:2px;
+  }
+  .header-actions{display:flex;align-items:center;gap:10px}
+  .btn-cart-header{
+    background:var(--primary);color:#fff;border:none;
+    font-family:var(--font-body);font-size:.85rem;font-weight:600;
+    padding:8px 18px;border-radius:50px;cursor:pointer;
+    display:flex;align-items:center;gap:6px;
+    transition:background .2s,transform .15s;
+    position:relative;
+  }
+  .btn-cart-header:hover{background:var(--primary-dark);transform:scale(1.04)}
+  .cart-badge{
+    background:#fff;color:var(--primary);
+    font-size:.7rem;font-weight:700;
+    border-radius:50%;width:18px;height:18px;
+    display:flex;align-items:center;justify-content:center;
+    line-height:1;
+  }
+
+  /* ── HERO ── */
+  .hero{
+    background:linear-gradient(135deg,var(--primary) 0%,#f4720e 60%,var(--accent) 100%);
+    padding:48px 20px 52px;text-align:center;
+    position:relative;overflow:hidden;
+  }
+  .hero::before{
+    content:'🎁';font-size:6rem;opacity:.08;
+    position:absolute;top:-10px;right:-20px;
+    transform:rotate(15deg);user-select:none;
+  }
+  .hero::after{
+    content:'🚗';font-size:5rem;opacity:.08;
+    position:absolute;bottom:-10px;left:-10px;
+    transform:rotate(-15deg);user-select:none;
+  }
+  .hero h1{
+    font-family:var(--font-display);font-size:2.2rem;font-weight:900;
+    color:#fff;line-height:1.15;margin-bottom:10px;
+  }
+  .hero p{color:rgba(255,255,255,.88);font-size:1rem;font-weight:500}
+
+  /* ── FILTERS ── */
+  .filters{
+    max-width:900px;margin:0 auto;
+    padding:20px 16px 8px;
+    display:flex;gap:10px;flex-wrap:wrap;
+  }
+  .filter-btn{
+    border:2px solid var(--border);background:var(--surface);
+    color:var(--muted);font-family:var(--font-body);font-size:.82rem;font-weight:600;
+    padding:7px 18px;border-radius:50px;cursor:pointer;
+    transition:all .2s;letter-spacing:.3px;
+  }
+  .filter-btn.active,
+  .filter-btn:hover{
+    background:var(--primary);color:#fff;border-color:var(--primary);
+  }
+
+  /* ── GRID ── */
+  .products-section{max-width:900px;margin:0 auto;padding:12px 16px 100px}
+  .products-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    gap:16px;
+  }
+
+  /* ── CARD ── */
+  .card{
+    background:var(--surface);border-radius:var(--radius);
+    border:1.5px solid var(--border);
+    overflow:hidden;
+    transition:transform .22s,box-shadow .22s;
+    display:flex;flex-direction:column;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+  .card-img-wrap{
+    width:100%;aspect-ratio:1/1;overflow:hidden;
+    background:var(--primary-light);position:relative;
+  }
+  .card-img-wrap img{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform .4s;
+    display:block;
+  }
+  .card:hover .card-img-wrap img{transform:scale(1.06)}
+  .card-body{padding:12px 12px 14px;flex:1;display:flex;flex-direction:column;gap:6px}
+  .card-name{font-weight:600;font-size:.9rem;line-height:1.3;color:var(--text)}
+  .card-desc{font-size:.75rem;color:var(--muted);line-height:1.4;flex:1}
+  .card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}
+  .card-price{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:var(--primary)}
+  .btn-add{
+    background:var(--primary);color:#fff;border:none;
+    font-family:var(--font-body);font-size:.75rem;font-weight:600;
+    padding:7px 13px;border-radius:50px;cursor:pointer;
+    transition:background .2s,transform .15s;white-space:nowrap;
+  }
+  .btn-add:hover{background:var(--primary-dark)}
+  .btn-add:active{transform:scale(.95)}
+  .btn-add.added{background:#22a85a}
+
+  /* ── CART OVERLAY ── */
+  .overlay{
+    position:fixed;inset:0;background:rgba(26,16,6,.55);
+    z-index:200;opacity:0;pointer-events:none;
+    transition:opacity .3s;backdrop-filter:blur(2px);
+  }
+  .overlay.open{opacity:1;pointer-events:all}
+
+  /* ── CART PANEL ── */
+  .cart-panel{
+    position:fixed;right:0;top:0;bottom:0;
+    width:min(420px,100vw);
+    background:var(--surface);
+    z-index:201;
+    display:flex;flex-direction:column;
+    transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+    box-shadow:-8px 0 40px rgba(0,0,0,.12);
+  }
+  .cart-panel.open{transform:translateX(0)}
+
+  .cart-header{
+    padding:18px 20px;
+    border-bottom:2px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--surface);
+  }
+  .cart-title{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--text)}
+  .btn-close{
+    background:var(--border);border:none;width:34px;height:34px;
+    border-radius:50%;cursor:pointer;font-size:1.1rem;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .2s;color:var(--muted);
+  }
+  .btn-close:hover{background:var(--primary);color:#fff}
+
+  .cart-items{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:12px}
+  .cart-empty{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    height:100%;gap:12px;color:var(--muted);text-align:center;padding:24px;
+  }
+  .cart-empty .icon{font-size:3.5rem}
+
+  .cart-item{
+    background:var(--bg);border-radius:12px;padding:12px;
+    display:flex;align-items:center;gap:12px;
+    border:1.5px solid var(--border);
+    animation:slideIn .25s ease;
+  }
+  @keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+  .ci-img{width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0}
+  .ci-info{flex:1;min-width:0}
+  .ci-name{font-size:.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ci-subtotal{font-size:.8rem;color:var(--primary);font-weight:700;margin-top:2px}
+  .ci-controls{display:flex;align-items:center;gap:6px;margin-top:6px}
+  .qty-btn{
+    background:var(--border);border:none;width:26px;height:26px;
+    border-radius:50%;cursor:pointer;font-size:.95rem;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s;color:var(--text);
+  }
+  .qty-btn:hover{background:var(--primary);color:#fff}
+  .qty-val{font-size:.85rem;font-weight:700;min-width:20px;text-align:center}
+  .btn-remove{
+    background:none;border:none;color:#e03737;cursor:pointer;
+    font-size:.75rem;font-weight:600;padding:0 4px;
+    transition:color .15s;
+  }
+  .btn-remove:hover{color:#ad1c1c}
+
+  .cart-footer{
+    padding:16px 20px;border-top:2px solid var(--border);
+    background:var(--surface);
+  }
+  .total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .total-label{font-size:.9rem;color:var(--muted);font-weight:500}
+  .total-amount{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--primary)}
+  .btn-checkout{
+    width:100%;background:var(--primary);color:#fff;border:none;
+    font-family:var(--font-body);font-size:1rem;font-weight:700;
+    padding:15px;border-radius:12px;cursor:pointer;
+    transition:background .2s,transform .15s;letter-spacing:.3px;
+  }
+  .btn-checkout:hover{background:var(--primary-dark)}
+  .btn-checkout:active{transform:scale(.98)}
+  .btn-checkout:disabled{background:#ccc;cursor:not-allowed}
+
+  /* ── ORDER MODAL ── */
+  .order-modal{
+    position:fixed;inset:0;z-index:300;
+    display:flex;align-items:flex-end;justify-content:center;
+    pointer-events:none;
+  }
+  .order-modal.open{pointer-events:all}
+  .order-backdrop{
+    position:absolute;inset:0;background:rgba(26,16,6,.6);
+    opacity:0;transition:opacity .3s;backdrop-filter:blur(3px);
+  }
+  .order-modal.open .order-backdrop{opacity:1}
+  .order-sheet{
+    position:relative;z-index:1;
+    background:var(--surface);
+    width:min(500px,100vw);
+    border-radius:24px 24px 0 0;
+    padding:28px 24px 40px;
+    max-height:92vh;overflow-y:auto;
+    transform:translateY(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);
+  }
+  .order-modal.open .order-sheet{transform:translateY(0)}
+
+  .order-sheet h2{
+    font-family:var(--font-display);font-size:1.5rem;font-weight:700;
+    margin-bottom:6px;color:var(--text);
+  }
+  .order-sheet p.sub{font-size:.82rem;color:var(--muted);margin-bottom:20px}
+
+  .form-group{margin-bottom:16px}
+  .form-group label{
+    display:block;font-size:.8rem;font-weight:600;
+    color:var(--muted);margin-bottom:6px;letter-spacing:.4px;text-transform:uppercase;
+  }
+  .form-group input,
+  .form-group textarea{
+    width:100%;background:var(--bg);border:2px solid var(--border);
+    border-radius:10px;padding:12px 14px;
+    font-family:var(--font-body);font-size:.92rem;color:var(--text);
+    outline:none;transition:border-color .2s;
+    resize:vertical;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus{border-color:var(--primary)}
+  .form-group textarea{min-height:80px}
+
+  .order-summary-preview{
+    background:var(--primary-light);border-radius:12px;
+    padding:14px;margin-bottom:20px;
+    font-size:.82rem;color:var(--text);line-height:1.7;
+    border:1.5px solid var(--border);
+  }
+  .order-summary-preview strong{font-weight:700;color:var(--primary)}
+
+  .btn-place{
+    width:100%;background:var(--primary);color:#fff;border:none;
+    font-family:var(--font-body);font-size:1rem;font-weight:700;
+    padding:15px;border-radius:12px;cursor:pointer;
+    transition:background .2s,transform .15s;
+  }
+  .btn-place:hover{background:var(--primary-dark)}
+  .btn-place:active{transform:scale(.98)}
+  .btn-cancel-order{
+    width:100%;background:none;border:2px solid var(--border);
+    color:var(--muted);font-family:var(--font-body);font-size:.88rem;font-weight:600;
+    padding:11px;border-radius:12px;cursor:pointer;margin-top:10px;
+    transition:border-color .2s,color .2s;
+  }
+  .btn-cancel-order:hover{border-color:var(--primary);color:var(--primary)}
+
+  /* ── SUCCESS MODAL ── */
+  .success-modal{
+    position:fixed;inset:0;z-index:400;
+    display:flex;align-items:center;justify-content:center;
+    pointer-events:none;
+    padding:20px;
+  }
+  .success-modal.open{pointer-events:all}
+  .success-backdrop{
+    position:absolute;inset:0;background:rgba(26,16,6,.65);
+    opacity:0;transition:opacity .3s;backdrop-filter:blur(4px);
+  }
+  .success-modal.open .success-backdrop{opacity:1}
+  .success-box{
+    position:relative;z-index:1;
+    background:var(--surface);
+    border-radius:24px;padding:36px 28px;
+    text-align:center;max-width:360px;width:100%;
+    transform:scale(.85);opacity:0;
+    transition:transform .4s cubic-bezier(.4,0,.2,1),opacity .4s;
+  }
+  .success-modal.open .success-box{transform:scale(1);opacity:1}
+  .success-icon{font-size:3.5rem;margin-bottom:12px;display:block}
+  .success-box h2{
+    font-family:var(--font-display);font-size:1.5rem;font-weight:700;
+    color:var(--text);margin-bottom:10px;
+  }
+  .success-box p{font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:20px}
+  .btn-wa{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#25d366;color:#fff;
+    font-family:var(--font-body);font-size:.9rem;font-weight:700;
+    padding:13px 24px;border-radius:50px;text-decoration:none;
+    transition:background .2s,transform .15s;
+  }
+  .btn-wa:hover{background:#1da851;transform:scale(1.04)}
+  .btn-dismiss{
+    display:block;margin-top:12px;
+    background:none;border:none;font-family:var(--font-body);
+    font-size:.82rem;color:var(--muted);cursor:pointer;
+    text-decoration:underline;
+  }
+
+  /* ── FLOATING BUTTONS ── */
+  .fab-wrap{
+    position:fixed;bottom:24px;right:20px;
+    z-index:150;display:flex;flex-direction:column;align-items:flex-end;gap:12px;
+  }
+  .fab-cart{
+    background:var(--primary);color:#fff;
+    width:58px;height:58px;border-radius:50%;
+    border:none;cursor:pointer;font-size:1.4rem;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow-lg);
+    transition:transform .2s,background .2s;
+    position:relative;
+  }
+  .fab-cart:hover{background:var(--primary-dark);transform:scale(1.08)}
+  .fab-badge{
+    position:absolute;top:-4px;right:-4px;
+    background:#ffb347;color:#1a1006;
+    font-size:.65rem;font-weight:700;
+    min-width:20px;height:20px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    border:2px solid #fff;
+    animation:pop .2s ease;
+  }
+  @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+  .fab-wa{
+    background:#25d366;color:#fff;
+    width:50px;height:50px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 20px rgba(37,211,102,.35);
+    text-decoration:none;font-size:1.3rem;
+    transition:transform .2s,background .2s;
+  }
+  .fab-wa:hover{background:#1da851;transform:scale(1.08)}
+
+  /* ── FOOTER ── */
+  footer{
+    text-align:center;padding:28px 16px;
+    font-size:.78rem;color:var(--muted);
+    border-top:2px solid var(--border);
+    background:var(--surface);
+  }
+  footer a{color:var(--primary);text-decoration:none}
+
+  /* ── HIDDEN FIELDS ── */
+  .hidden{display:none!important}
+
+  @media(max-width:400px){
+    .hero h1{font-size:1.7rem}
+    .products-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo-block">
+      <div class="logo-name">🎁 Mega Gift Store</div>
+      <div class="logo-tag">Unique Gifts Under-budget</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-cart-header" onclick="openCart()">
+        🛒 Cart <span class="cart-badge" id="headerBadge">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Unique Gifts,<br/>Unbeatable Prices</h1>
+  <p>Handpicked gift ideas that won't break your budget 🎉</p>
+</div>
+
+<!-- FILTERS -->
+<div class="filters" id="filtersWrap">
+  <button class="filter-btn active" onclick="filterProducts('all',this)">All Products</button>
+  <button class="filter-btn" onclick="filterProducts('Toy cars',this)">🚗 Toy Cars</button>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products-section">
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>📞 Call us: <a href="tel:6205593984">6205593984</a> &nbsp;|&nbsp; ✉️ <a href="mailto:techyfaiz8916@gmail.com">techyfaiz8916@gmail.com</a></p>
+  <p style="margin-top:8px">© 2025 Mega Gift Store — Order online, we'll confirm on WhatsApp!</p>
+</footer>
+
+<!-- FLOATING BUTTONS -->
+<div class="fab-wrap">
+  <a class="fab-wa" href="https://wa.me/916205593984" target="_blank" title="Chat on WhatsApp">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+  <button class="fab-cart" onclick="openCart()" title="View Cart">
+    🛒
+    <span class="fab-badge hidden" id="fabBadge">0</span>
+  </button>
+</div>
+
+<!-- CART OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<!-- CART PANEL -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <span class="cart-title">🛒 Your Cart</span>
+    <button class="btn-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="total-row">
+      <span class="total-label">Grand Total</span>
+      <span class="total-amount" id="grandTotal">₹0</span>
+    </div>
+    <button class="btn-checkout" id="btnCheckout" onclick="openOrderModal()">Proceed to Order →</button>
+  </div>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="order-modal" id="orderModal">
+  <div class="order-backdrop" onclick="closeOrderModal()"></div>
+  <div class="order-sheet">
+    <h2>📦 Place Your Order</h2>
+    <p class="sub">Fill in your details — we'll confirm via WhatsApp!</p>
+
+    <div class="order-summary-preview" id="orderSummaryPreview"></div>
+
+    <form id="orderForm" action="https://formspree.io/f/xgolqybv" method="POST" onsubmit="handleOrderSubmit(event)">
+      <!-- Hidden compiled order summary -->
+      <input type="hidden" name="_subject" id="formSubject" value="New Order from Mega Gift Store"/>
+      <input type="hidden" name="order_summary" id="formOrderSummary"/>
+      <input type="hidden" name="grand_total" id="formGrandTotal"/>
+
+      <div class="form-group">
+        <label>Your Name *</label>
+        <input type="text" name="customer_name" id="fieldName" placeholder="Full name" required/>
+      </div>
+      <div class="form-group">
+        <label>Phone Number *</label>
+        <input type="tel" name="phone" id="fieldPhone" placeholder="10-digit mobile number" required pattern="[0-9]{10,12}"/>
+      </div>
+      <div class="form-group">
+        <label>Delivery Address *</label>
+        <textarea name="delivery_address" id="fieldAddress" placeholder="House no., street, area, city, pincode" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Special Instructions</label>
+        <textarea name="special_instructions" id="fieldInstructions" placeholder="Any colour preference, gift wrapping, etc. (optional)"></textarea>
+      </div>
+
+      <button type="submit" class="btn-place" id="btnPlace">✅ Confirm Order</button>
+      <button type="button" class="btn-cancel-order" onclick="closeOrderModal()">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="success-modal" id="successModal">
+  <div class="success-backdrop"></div>
+  <div class="success-box">
+    <span class="success-icon">🎉</span>
+    <h2>Order Placed!</h2>
+    <p>Thank you for your order!<br/><strong>Mega Gift Store</strong> will contact you on WhatsApp to confirm availability and delivery.</p>
+    <a class="btn-wa" href="https://wa.me/916205593984" target="_blank">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Chat on WhatsApp
+    </a>
+    <button class="btn-dismiss" onclick="closeSuccessModal()">Close</button>
+  </div>
+</div>
+
+<script>
+// ──────────────────────────────
+//  PRODUCT DATA
+// ──────────────────────────────
+const PRODUCTS = [
+  {
+    id:1,
+    name:"Mini Watch RC Car",
+    price:800,
+    category:"Toy cars",
+    image:"https://i.ibb.co/9HZR4nGd/Wrist-Watch-Remote-Control-Mini-Car-Rechargeable.jpg",
+    desc:"Unique Trending watch RC Cars for your Kids"
+  },
+  {
+    id:2,
+    name:"Mini Ambassador",
+    price:300,
+    category:"Toy cars",
+    image:"https://i.ibb.co/7d8MPchK/Whats-App-Image-2026-02-27-at-10-56-29-PM.jpg",
+    desc:"Premium Diecast Ambassador car"
+  }
+];
+
+// ──────────────────────────────
+//  CART STATE (localStorage)
+// ──────────────────────────────
+let cart = JSON.parse(localStorage.getItem('mgCart') || '[]');
+
+function saveCart(){ localStorage.setItem('mgCart', JSON.stringify(cart)); }
+
+function getCartCount(){ return cart.reduce((s,i)=>s+i.qty,0); }
+
+function getCartTotal(){ return cart.reduce((s,i)=>s+(i.price*i.qty),0); }
+
+function updateBadges(){
+  const n = getCartCount();
+  document.getElementById('headerBadge').textContent = n;
+  const fb = document.getElementById('fabBadge');
+  if(n>0){ fb.textContent=n; fb.classList.remove('hidden'); }
+  else { fb.classList.add('hidden'); }
+  const btn = document.getElementById('btnCheckout');
+  btn.disabled = n===0;
+}
+
+// ──────────────────────────────
+//  RENDER PRODUCTS
+// ──────────────────────────────
+let activeFilter = 'all';
+
+function renderProducts(){
+  const grid = document.getElementById('productsGrid');
+  const filtered = activeFilter==='all' ? PRODUCTS : PRODUCTS.filter(p=>p.category===activeFilter);
+  grid.innerHTML = filtered.map(p=>{
+    const inCart = cart.find(i=>i.id===p.id);
+    return `
+    <div class="card" data-id="${p.id}">
+      <div class="card-img-wrap">
+        <img src="${p.image}" alt="${p.name}" loading="lazy"/>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${p.name}</div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-footer">
+          <span class="card-price">₹${p.price}</span>
+          <button class="btn-add ${inCart?'added':''}" onclick="addToCart(${p.id},this)">
+            ${inCart?'✓ Added':'+ Cart'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterProducts(cat, btn){
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+// ──────────────────────────────
+//  CART OPERATIONS
+// ──────────────────────────────
+function addToCart(id, btn){
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  const existing = cart.find(i=>i.id===id);
+  if(existing){ existing.qty++; }
+  else { cart.push({id:p.id,name:p.name,price:p.price,image:p.image,qty:1}); }
+  saveCart(); updateBadges(); renderCart();
+  btn.textContent='✓ Added'; btn.classList.add('added');
+  // small pop feedback
+  btn.style.transform='scale(1.15)';
+  setTimeout(()=>{ btn.style.transform=''; },200);
+}
+
+function changeQty(id, delta){
+  const item = cart.find(i=>i.id===id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty<=0) cart = cart.filter(i=>i.id!==id);
+  saveCart(); updateBadges(); renderCart(); renderProducts();
+}
+
+function removeItem(id){
+  cart = cart.filter(i=>i.id!==id);
+  saveCart(); updateBadges(); renderCart(); renderProducts();
+}
+
+function renderCart(){
+  const wrap = document.getElementById('cartItems');
+  const total = getCartTotal();
+  document.getElementById('grandTotal').textContent = '₹'+total.toLocaleString('en-IN');
+
+  if(cart.length===0){
+    wrap.innerHTML=`<div class="cart-empty"><div class="icon">🛒</div><p>Your cart is empty.<br/>Add some gifts!</p></div>`;
+    return;
+  }
+  wrap.innerHTML = cart.map(item=>`
+    <div class="cart-item">
+      <img class="ci-img" src="${item.image}" alt="${item.name}" loading="lazy"/>
+      <div class="ci-info">
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-subtotal">₹${(item.price*item.qty).toLocaleString('en-IN')}</div>
+        <div class="ci-controls">
+          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+          <span class="qty-val">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+          <button class="btn-remove" onclick="removeItem(${item.id})">✕ Remove</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ──────────────────────────────
+//  OPEN / CLOSE CART
+// ──────────────────────────────
+function openCart(){
+  renderCart();
+  document.getElementById('cartPanel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCart(){
+  document.getElementById('cartPanel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ──────────────────────────────
+//  ORDER MODAL
+// ──────────────────────────────
+function buildOrderSummaryText(){
+  let lines = cart.map(i=>`- ${i.name} x${i.qty} = Rs.${(i.price*i.qty).toLocaleString('en-IN')}`);
+  lines.push('');
+  lines.push('GRAND TOTAL: Rs.'+getCartTotal().toLocaleString('en-IN'));
+  return lines.join('\n');
+}
+
+function openOrderModal(){
+  if(cart.length===0) return;
+  closeCart();
+
+  // populate summary preview
+  const prev = document.getElementById('orderSummaryPreview');
+  let html = '<strong>Order Summary:</strong><br/>';
+  cart.forEach(i=>{
+    html += `${i.name} × ${i.qty} &nbsp;=&nbsp; ₹${(i.price*i.qty).toLocaleString('en-IN')}<br/>`;
+  });
+  html += `<strong>Grand Total: ₹${getCartTotal().toLocaleString('en-IN')}</strong>`;
+  prev.innerHTML = html;
+
+  // populate hidden fields
+  document.getElementById('formOrderSummary').value = buildOrderSummaryText();
+  document.getElementById('formGrandTotal').value = 'Rs.'+getCartTotal().toLocaleString('en-IN');
+  document.getElementById('formSubject').value =
+    `New Order - Rs.${getCartTotal().toLocaleString('en-IN')} - Mega Gift Store`;
+
+  document.getElementById('orderModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeOrderModal(){
+  document.getElementById('orderModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ──────────────────────────────
+//  FORM SUBMIT
+// ──────────────────────────────
+async function handleOrderSubmit(e){
+  e.preventDefault();
+  const btn = document.getElementById('btnPlace');
+  btn.textContent='Sending…'; btn.disabled=true;
+
+  const form = document.getElementById('orderForm');
+  const data = new FormData(form);
+
+  // Append customer name to subject for easy identification
+  const name = document.getElementById('fieldName').value;
+  const phone = document.getElementById('fieldPhone').value;
+  data.set('_subject', `New Order from ${name} (${phone}) — Mega Gift Store`);
+
+  try{
+    const res = await fetch(form.action, { method:'POST', body:data, headers:{Accept:'application/json'} });
+    if(res.ok){
+      closeOrderModal();
+      cart=[];
+      saveCart();
+      updateBadges();
+      renderProducts();
+      openSuccessModal();
+    } else {
+      alert('Oops! Something went wrong. Please try again or call us directly.');
+    }
+  } catch(err){
+    alert('Network error. Please check your connection and try again.');
+  }
+  btn.textContent='✅ Confirm Order'; btn.disabled=false;
+}
+
+// ──────────────────────────────
+//  SUCCESS MODAL
+// ──────────────────────────────
+function openSuccessModal(){
+  document.getElementById('successModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSuccessModal(){
+  document.getElementById('successModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ──────────────────────────────
+//  INIT
+// ──────────────────────────────
+renderProducts();
+updateBadges();
+</script>
+</body>
+</html>
